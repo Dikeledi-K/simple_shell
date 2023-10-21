@@ -1,31 +1,12 @@
 #include "shell.h"
 
-char **_getenv(const char *var);
 char **_copyenv(void);
 void free_env(void);
+char **_getenv(const char *var);
 
 /**
- * _getenv - Gets environmental variable from PATH.
- * @var: The name of the environmental variable to get.
- * Return: If the environmental variable does not exist - NULL.
- *         Otherwise - a pointer to environmental variable.
- */
-char **_getenv(const char *var)
-{
-	int index, len;
-
-	len = _strlen(var);
-	for (index = 0; environ[index]; index++)
-	{
-		if (_strncmp(var, environ[index], len) == 0)
-			return (&environ[index]);
-	}
-
-	return (NULL);
-}
-
-/**
- * _copyenv - Creates copy of environment.
+ * _copyenv - Creates a copy of the environment.
+ *
  * Return: If an error occurs - NULL.
  *         O/w - a double pointer to the new copy.
  */
@@ -60,9 +41,8 @@ char **_copyenv(void)
 	return (new_environ);
 }
 
-
 /**
- * free_env - Frees the environment copy.
+ * free_env - Frees the the environment copy.
  */
 void free_env(void)
 {
@@ -73,3 +53,23 @@ void free_env(void)
 	free(environ);
 }
 
+/**
+ * _getenv - Gets an environmental variable from the PATH.
+ * @var: The name of the environmental variable to get.
+ *
+ * Return: If the environmental variable does not exist - NULL.
+ *         Otherwise - a pointer to the environmental variable.
+ */
+char **_getenv(const char *var)
+{
+	int index, len;
+
+	len = _strlen(var);
+	for (index = 0; environ[index]; index++)
+	{
+		if (_strncmp(var, environ[index], len) == 0)
+			return (&environ[index]);
+	}
+
+	return (NULL);
+}

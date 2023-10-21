@@ -1,26 +1,25 @@
 #include "shell.h"
-
-int (*customCommand(char *command))(char **args, char **front);
-int customExit(char **args, char **front);
-int customChange(char **args, char __attribute__((__unused__)) **front);
+int (*get_builtin(char *command))(char **args, char **front);
+int shellby_exit(char **args, char **front);
+int shellby_cd(char **args, char __attribute__((__unused__)) **front);
 int shellby_help(char **args, char __attribute__((__unused__)) **front);
 
 /**
- * customCommand - Matches command with  corresponding
+ * get_builtin - Matches a command with a corresponding
  *               shellby builtin function.
  * @command: The command to match.
  *
- * Return: A function pointer to corresponding builtin.
+ * Return: A function pointer to the corresponding builtin.
  */
-int (*customCommand(char *command))(char **args, char **front)
+int (*get_builtin(char *command))(char **args, char **front)
 {
 	builtin_t funcs[] = {
-		{ "exit", customExit },
+		{ "exit", shellby_exit },
 		{ "env", shellby_env },
 		{ "setenv", shellby_setenv },
 		{ "unsetenv", shellby_unsetenv },
-		{ "cd", customChange },
-		{ "alias", handleAlias },
+		{ "cd", shellby_cd },
+		{ "alias", shellby_alias },
 		{ "help", shellby_help },
 		{ NULL, NULL }
 	};
@@ -35,18 +34,18 @@ int (*customCommand(char *command))(char **args, char **front)
 }
 
 /**
- * customExit - Causes normal process termination
- *                for shellby shell.
+ * shellby_exit - Causes normal process termination
+ *                for the shellby shell.
  * @args: An array of arguments containing the exit value.
  * @front: A double pointer to the beginning of args.
  *
  * Return: If there are no arguments - -3.
- *         If given exit value is invalid - 2.
- *         O/w - exits with given status value.
+ *         If the given exit value is invalid - 2.
+ *         O/w - exits with the given status value.
  *
- * Description: Upon returning -3, the program exits back in main function.
+ * Description: Upon returning -3, the program exits back in the main function.
  */
-int customExit(char **args, char **front)
+int shellby_exit(char **args, char **front)
 {
 	int i, len_of_int = 10;
 	unsigned int num = 0, max = 1 << (sizeof(int) * 8 - 1);
@@ -80,7 +79,7 @@ int customExit(char **args, char **front)
 }
 
 /**
- * customChange - Changes  current directory of the shellby process.
+ * shellby_cd - Changes the current directory of the shellby process.
  * @args: An array of arguments.
  * @front: A double pointer to the beginning of args.
  *
@@ -88,7 +87,7 @@ int customExit(char **args, char **front)
  *         If an error occurs - -1.
  *         Otherwise - 0.
  */
-int customChange(char **args, char __attribute__((__unused__)) **front)
+int shellby_cd(char **args, char __attribute__((__unused__)) **front)
 {
 	char **dir_info, *new_line = "\n";
 	char *oldpwd = NULL, *pwd = NULL;
